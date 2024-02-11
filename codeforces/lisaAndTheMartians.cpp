@@ -1,7 +1,7 @@
-/**
+/** 
  immortalZodd
- 25.01.2024 23:43:25
- ferrisWheel
+ 02.02.2024 21:53:38
+ lisaAndTheMartians
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -17,31 +17,15 @@ using vl = vector<ll>;
 
 void solve(){
     ll n,k; cin>>n>>k;
-    vl arr(n,0); for(auto &x:arr) cin>>x;
-    sort(all(arr));
-
-    /* always pair lightest kid with heaviest kid, if weight limit exceeds,
-    	then let heavy kid be in a gondola alone */
-    ll si=0,ei=n-1,ans=0;
-    while(si<=ei){
-    	if(arr[si]+arr[ei]>k){
-    		ans++;
-    		ei--;
-    	}
-    	else if(arr[si]+arr[ei]<=k){
-    		ans++;
-    		si++;
-    		ei--;
-    	}
-    }
-    cout<<ans<<nL;
+    vi arr(n,0); for(auto &x:arr) cin>>x;
+    
 }
 
 int main(){
     ios_base::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);
   
     ll t=1;
-    // cin>>t;
+    cin>>t;
 
     while(t--){
         solve();

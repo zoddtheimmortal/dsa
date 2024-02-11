@@ -1,7 +1,7 @@
-/**
+/** 
  immortalZodd
- 25.01.2024 23:43:25
- ferrisWheel
+ 31.01.2024 11:30:52
+ preparingOlympiad
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -15,26 +15,30 @@ using vl = vector<ll>;
 #define rf(i, a, b) for (ll i = b; i >=(a); i--)
 #define nL "\n"
 
-void solve(){
-    ll n,k; cin>>n>>k;
-    vl arr(n,0); for(auto &x:arr) cin>>x;
-    sort(all(arr));
+ll n,l,r,x;
 
-    /* always pair lightest kid with heaviest kid, if weight limit exceeds,
-    	then let heavy kid be in a gondola alone */
-    ll si=0,ei=n-1,ans=0;
-    while(si<=ei){
-    	if(arr[si]+arr[ei]>k){
-    		ans++;
-    		ei--;
-    	}
-    	else if(arr[si]+arr[ei]<=k){
-    		ans++;
-    		si++;
-    		ei--;
-    	}
-    }
-    cout<<ans<<nL;
+ll check(vi arr){
+	ll ans=0;
+	fr(mask,0,(1<<n)){
+		ll tot_diff=0,min_i=-1,max_i=-1;
+		if(__builtin_popcount(mask)<2) continue;
+		fr(i,0,n){
+			if(mask&(1<<i)){
+				if(min_i==-1) min_i=i;
+				max_i=i;
+				tot_diff+=arr[i];
+			}
+		}
+		if(l<=tot_diff && r>=tot_diff && x<=(arr[max_i]-arr[min_i])) ans++;
+	}
+	return ans;
+}
+
+void solve(){
+	cin>>n>>l>>r>>x;
+    vi arr(n,0); for(auto &x:arr) cin>>x;
+    sort(all(arr));
+    cout<<check(arr)<<nL;
 }
 
 int main(){

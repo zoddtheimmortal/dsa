@@ -1,7 +1,7 @@
-/**
+/** 
  immortalZodd
- 25.01.2024 23:43:25
- ferrisWheel
+ 28.01.2024 23:32:20
+ convention
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -15,25 +15,38 @@ using vl = vector<ll>;
 #define rf(i, a, b) for (ll i = b; i >=(a); i--)
 #define nL "\n"
 
+bool check(vl arr,ll n,ll m,ll c,ll time){
+	ll prev=0,now=0,bus=0;
+	while(now<n){
+		if(prev==now) bus++;
+		if(arr[now]-arr[prev]>time){
+			prev=now;
+		}
+		else if(now-prev+1==c){
+			prev=++now;
+		}
+		else ++now;
+	}
+	return bus<=m;
+}
+
 void solve(){
-    ll n,k; cin>>n>>k;
+	freopen("convention.in","r",stdin);
+	freopen("convention.out","w",stdout);
+
+    ll n,m,c; cin>>n>>m>>c;
     vl arr(n,0); for(auto &x:arr) cin>>x;
     sort(all(arr));
 
-    /* always pair lightest kid with heaviest kid, if weight limit exceeds,
-    	then let heavy kid be in a gondola alone */
-    ll si=0,ei=n-1,ans=0;
+    ll si=0,ei=arr[n-1]-arr[0],ans=0;
     while(si<=ei){
-    	if(arr[si]+arr[ei]>k){
-    		ans++;
-    		ei--;
-    	}
-    	else if(arr[si]+arr[ei]<=k){
-    		ans++;
-    		si++;
-    		ei--;
-    	}
+    	ll mid=si+(ei-si)/2;
+    	if(check(arr,n,m,c,mid)){
+    		ans=mid;
+    		ei=mid-1;
+    	}else si=mid+1;
     }
+
     cout<<ans<<nL;
 }
 

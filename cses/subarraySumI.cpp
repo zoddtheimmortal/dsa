@@ -1,8 +1,3 @@
-/**
- immortalZodd
- 25.01.2024 23:43:25
- ferrisWheel
-**/
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -16,24 +11,22 @@ using vl = vector<ll>;
 #define nL "\n"
 
 void solve(){
-    ll n,k; cin>>n>>k;
+    ll n,q; cin>>n>>q;
     vl arr(n,0); for(auto &x:arr) cin>>x;
-    sort(all(arr));
-
-    /* always pair lightest kid with heaviest kid, if weight limit exceeds,
-    	then let heavy kid be in a gondola alone */
-    ll si=0,ei=n-1,ans=0;
-    while(si<=ei){
-    	if(arr[si]+arr[ei]>k){
-    		ans++;
-    		ei--;
+    ll si=0,ei=0,ans=0,cur=0;
+    while(si<n){
+    	while(ei<n){
+    		cur+=arr[ei++];
+    		if(cur>q){
+    			ei--;
+    			cur-=arr[ei];
+    			break;
+    		}
     	}
-    	else if(arr[si]+arr[ei]<=k){
-    		ans++;
-    		si++;
-    		ei--;
-    	}
+    	if(cur==q) ans++;
+    	cur-=arr[si++];
     }
+    if(cur==q) ans++;
     cout<<ans<<nL;
 }
 

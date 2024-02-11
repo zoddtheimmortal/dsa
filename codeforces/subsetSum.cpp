@@ -1,7 +1,7 @@
-/**
+/** 
  immortalZodd
- 25.01.2024 23:43:25
- ferrisWheel
+ 31.01.2024 00:05:44
+ subsetSum
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -16,25 +16,18 @@ using vl = vector<ll>;
 #define nL "\n"
 
 void solve(){
-    ll n,k; cin>>n>>k;
-    vl arr(n,0); for(auto &x:arr) cin>>x;
-    sort(all(arr));
+    ll n,S; cin>>n>>S;
+    vi arr(n,0); for(auto &x:arr) cin>>x;
 
-    /* always pair lightest kid with heaviest kid, if weight limit exceeds,
-    	then let heavy kid be in a gondola alone */
-    ll si=0,ei=n-1,ans=0;
-    while(si<=ei){
-    	if(arr[si]+arr[ei]>k){
-    		ans++;
-    		ei--;
+    for(ll mask=0;mask<(1<<n);mask++){
+    	ll sum=0;
+    	for(int i=0;i<n;i++){
+    		if(mask&(1<<i)) sum+=arr[i];
     	}
-    	else if(arr[si]+arr[ei]<=k){
-    		ans++;
-    		si++;
-    		ei--;
-    	}
+    	if(sum==S) cout<<"YES"<<nL;
+    	else cout<<"NO"<<nL;
     }
-    cout<<ans<<nL;
+
 }
 
 int main(){

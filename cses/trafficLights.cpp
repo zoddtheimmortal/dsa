@@ -1,7 +1,7 @@
-/**
+/** 
  immortalZodd
- 25.01.2024 23:43:25
- ferrisWheel
+ 25.01.2024 19:37:34
+ trafficLights
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -16,25 +16,28 @@ using vl = vector<ll>;
 #define nL "\n"
 
 void solve(){
-    ll n,k; cin>>n>>k;
-    vl arr(n,0); for(auto &x:arr) cin>>x;
-    sort(all(arr));
+	ll n,q; cin>>n>>q;
 
-    /* always pair lightest kid with heaviest kid, if weight limit exceeds,
-    	then let heavy kid be in a gondola alone */
-    ll si=0,ei=n-1,ans=0;
-    while(si<=ei){
-    	if(arr[si]+arr[ei]>k){
-    		ans++;
-    		ei--;
-    	}
-    	else if(arr[si]+arr[ei]<=k){
-    		ans++;
-    		si++;
-    		ei--;
-    	}
-    }
-    cout<<ans<<nL;
+	set<ll> lights; 
+	lights.insert(0); lights.insert(n);
+
+	multiset<ll> dist;
+	dist.insert(n);
+
+	while(q--){
+		ll k; cin>>k;
+		auto mx=lights.upper_bound(k);
+		auto mn=mx;
+		mn--;
+		dist.erase(dist.find(*mx-*mn));
+		dist.insert(k-*mn);
+		dist.insert(*mx-k);
+
+		ll ans=*(dist.rbegin());
+		cout<<ans<<" ";
+		lights.insert(k);
+	}
+	cout<<nL;
 }
 
 int main(){

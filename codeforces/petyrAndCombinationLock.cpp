@@ -1,7 +1,7 @@
-/**
+/** 
  immortalZodd
- 25.01.2024 23:43:25
- ferrisWheel
+ 31.01.2024 11:17:19
+ petyrAndCombinationLock
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -15,26 +15,26 @@ using vl = vector<ll>;
 #define rf(i, a, b) for (ll i = b; i >=(a); i--)
 #define nL "\n"
 
-void solve(){
-    ll n,k; cin>>n>>k;
-    vl arr(n,0); for(auto &x:arr) cin>>x;
-    sort(all(arr));
+bool check(vi arr,ll n){
+	ll rot=0;
+	for(ll mask=0;mask<(1<<n);mask++){
+		rot=0;
+		fr(i,0,n){
+			if(mask&(1<<i)){
+				rot+=arr[i];
+			}else rot-=arr[i];
+		}
+		if(rot%360==0) return true;
+	}
+	return false;
+}
 
-    /* always pair lightest kid with heaviest kid, if weight limit exceeds,
-    	then let heavy kid be in a gondola alone */
-    ll si=0,ei=n-1,ans=0;
-    while(si<=ei){
-    	if(arr[si]+arr[ei]>k){
-    		ans++;
-    		ei--;
-    	}
-    	else if(arr[si]+arr[ei]<=k){
-    		ans++;
-    		si++;
-    		ei--;
-    	}
-    }
-    cout<<ans<<nL;
+void solve(){
+    ll n; cin>>n;
+    vi arr(n,0); fr(i,0,n) cin>>arr[i];
+
+    bool ans=check(arr,n);
+    cout<<(ans?"YES\n":"NO\n");
 }
 
 int main(){

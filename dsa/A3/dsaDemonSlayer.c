@@ -1,0 +1,24 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<math.h>
+
+int main(){
+	int n; scanf("%d\n",&n);
+	char* arr=(char*) malloc(sizeof(char)*n);
+	scanf("%[^\n]s",arr);
+
+	int si=0,ei=0,last_space=0;
+	while(si<n && ei<n){
+		while(ei<n && arr[ei]!=' ') ei++;
+		last_space=ei;
+		ei--;
+		while(si<ei){
+			char t=arr[si];
+			arr[si]=arr[ei];
+			arr[ei]=t;
+			si++; ei--;
+		}
+		si=last_space+1,ei=last_space+1;
+	}
+	printf("%s\n",arr);
+}

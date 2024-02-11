@@ -1,7 +1,6 @@
 /**
  immortalZodd
- 25.01.2024 23:43:25
- ferrisWheel
+ 21.01.2024 09:36:01
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -16,24 +15,21 @@ using vl = vector<ll>;
 #define nL "\n"
 
 void solve(){
-    ll n,k; cin>>n>>k;
-    vl arr(n,0); for(auto &x:arr) cin>>x;
-    sort(all(arr));
-
-    /* always pair lightest kid with heaviest kid, if weight limit exceeds,
-    	then let heavy kid be in a gondola alone */
-    ll si=0,ei=n-1,ans=0;
-    while(si<=ei){
-    	if(arr[si]+arr[ei]>k){
-    		ans++;
-    		ei--;
-    	}
-    	else if(arr[si]+arr[ei]<=k){
-    		ans++;
-    		si++;
-    		ei--;
-    	}
+	ll n; cin>>n;
+    vector<pair<ll,ll>> arr(2*n);
+    for(int i=0;i<2*n;i+=2){
+    	ll in,out; cin>>in>>out;
+    	arr[i]=make_pair(in,0);
+    	arr[i+1]=make_pair(out,1);
     }
+    sort(all(arr));
+    ll ans=0,cnt=0;
+    fr(i,0,2*n){
+    	if(arr[i].second==0) cnt++;
+    	else cnt--;
+    	ans=max(ans,cnt);
+    }
+
     cout<<ans<<nL;
 }
 

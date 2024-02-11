@@ -1,7 +1,7 @@
-/**
+/** 
  immortalZodd
- 25.01.2024 23:43:25
- ferrisWheel
+ 27.01.2024 00:12:20
+ maximumMedian
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -15,24 +15,26 @@ using vl = vector<ll>;
 #define rf(i, a, b) for (ll i = b; i >=(a); i--)
 #define nL "\n"
 
+bool check(vl arr,ll n,ll left_pts,ll target){
+	ll cost=0;
+	fr(i,(n+1)/2,n){
+		cost+=max<ll>(0,target-arr[i]);
+	}
+	return cost<=left_pts;
+}
+
 void solve(){
     ll n,k; cin>>n>>k;
     vl arr(n,0); for(auto &x:arr) cin>>x;
     sort(all(arr));
-
-    /* always pair lightest kid with heaviest kid, if weight limit exceeds,
-    	then let heavy kid be in a gondola alone */
-    ll si=0,ei=n-1,ans=0;
+    ll cur_median=arr[n/2];
+    ll si=cur_median,ei=cur_median+k,ans=INT_MIN;
     while(si<=ei){
-    	if(arr[si]+arr[ei]>k){
-    		ans++;
-    		ei--;
-    	}
-    	else if(arr[si]+arr[ei]<=k){
-    		ans++;
-    		si++;
-    		ei--;
-    	}
+    	ll mid=si+(ei-si)/2;
+    	if(check(arr,n,k-(mid-cur_median),mid)){
+    		ans=mid;
+    		si=mid+1;
+    	}else ei=mid-1;
     }
     cout<<ans<<nL;
 }

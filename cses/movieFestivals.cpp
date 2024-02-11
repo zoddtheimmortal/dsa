@@ -1,7 +1,7 @@
-/**
+/** 
  immortalZodd
- 25.01.2024 23:43:25
- ferrisWheel
+ 25.01.2024 21:53:45
+ movieFestivals
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -15,25 +15,25 @@ using vl = vector<ll>;
 #define rf(i, a, b) for (ll i = b; i >=(a); i--)
 #define nL "\n"
 
-void solve(){
-    ll n,k; cin>>n>>k;
-    vl arr(n,0); for(auto &x:arr) cin>>x;
-    sort(all(arr));
+bool cmp(pair<ll,ll> a1,pair<ll,ll> a2){
+	return a1.second<a2.second;
+}
 
-    /* always pair lightest kid with heaviest kid, if weight limit exceeds,
-    	then let heavy kid be in a gondola alone */
-    ll si=0,ei=n-1,ans=0;
-    while(si<=ei){
-    	if(arr[si]+arr[ei]>k){
+void solve(){
+    ll n; cin>>n;
+    vector<pair<ll,ll>> arr(n);
+    fr(i,0,n){
+    	cin>>arr[i].first>>arr[i].second;
+    }
+    sort(all(arr),cmp);
+    ll ans=0,prev_end=-1;
+    fr(i,0,n){
+    	if(arr[i].first>=prev_end){
     		ans++;
-    		ei--;
-    	}
-    	else if(arr[si]+arr[ei]<=k){
-    		ans++;
-    		si++;
-    		ei--;
+    		prev_end=arr[i].second;
     	}
     }
+
     cout<<ans<<nL;
 }
 

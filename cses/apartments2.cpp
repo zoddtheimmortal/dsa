@@ -1,7 +1,7 @@
-/**
+/** 
  immortalZodd
- 25.01.2024 23:43:25
- ferrisWheel
+ 25.01.2024 22:19:47
+ apartments2
 **/
 #include <bits/stdc++.h>
 using namespace std;
@@ -16,25 +16,21 @@ using vl = vector<ll>;
 #define nL "\n"
 
 void solve(){
-    ll n,k; cin>>n>>k;
-    vl arr(n,0); for(auto &x:arr) cin>>x;
-    sort(all(arr));
-
-    /* always pair lightest kid with heaviest kid, if weight limit exceeds,
-    	then let heavy kid be in a gondola alone */
-    ll si=0,ei=n-1,ans=0;
-    while(si<=ei){
-    	if(arr[si]+arr[ei]>k){
-    		ans++;
-    		ei--;
-    	}
-    	else if(arr[si]+arr[ei]<=k){
-    		ans++;
-    		si++;
-    		ei--;
-    	}
-    }
-    cout<<ans<<nL;
+    ll n,m,k; cin>>n>>m>>k;
+    vl apt(n,0),ppl(m,0);
+    fr(i,0,n) cin>>apt[i];
+    fr(i,0,m) cin>>ppl[i];
+	sort(all(apt)); sort(all(ppl));
+	ll i=0,j=0,ans=0;
+	while(i<n && j<m){
+		if(apt[i]-k>ppl[j]) j++;
+		else if(apt[i]-k<=ppl[j] && ppl[j]<=apt[i]+k){
+			i++; j++;
+			ans++;
+		}
+		else if(apt[i]+k<ppl[j]) i++;
+	}
+	cout<<ans<<nL;
 }
 
 int main(){
