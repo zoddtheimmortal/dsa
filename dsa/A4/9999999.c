@@ -25,8 +25,6 @@ void recur_combos(char* arr,int idx,ll sum,ll num){
 }
 
 int main(){
-	freopen("9999.in","r",stdin);
-	freopen("9999.out","w",stdout);
 	scanf("%lld %lld %lld %lld",&n,&k,&l,&r);
 	char* arr=(char*) malloc(sizeof(char)*n);
 	scanf("%s",arr);

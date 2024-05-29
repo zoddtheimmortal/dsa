@@ -1,32 +1,62 @@
-/**
- immortalZodd
- 15.01.2024 17:25:52
-**/
-#include <bits/stdc++.h>
+#include <algorithm>
+#include <iostream>
+#include <vector>
+
 using namespace std;
 
-using ll = long long;
-using vi = vector<int>;
-using vl = vector<ll>;
+vector<vector<int>> graph;
+vector<bool> visited, on_stack;
+vector<int> cycle;
 
-#define pb push_back
-#define v(x) vector<x>
-#define all(x) x.begin(), x.end()
-#define fr(i, a, b) for (ll i = a; i < (b); ++i)
-#define rf(i, a, b) for (ll i = b; i >=(a); i--)
-#define nL "\n"
+bool dfs(int node) {
+	visited[node] = on_stack[node] = true;
+	for (int next : graph[node]) {
+		if (on_stack[next]) {
+			cycle.push_back(node);  // start cycle
+			on_stack[node] = on_stack[next] = false;
+			return true;
+		} else if (!visited[next]) {
+			if (dfs(next)) {  // continue cycle
+				if (on_stack[node]) {
+					cycle.push_back(node);
+					on_stack[node] = false;
+					return true;
+				} else {  // found u again
+					cycle.push_back(node);
+					return false;
+				}
+			}
 
-void solve(){
-    
+			if (!cycle.empty()) {
+				return false;  // finished with cycle
+			}
+		}
+	}
+
+	on_stack[node] = false;
+	return false;
 }
 
-int main(){
-    ios_base::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);
-  
-    ll t=1;
-    // cin>>t;
+int main() {
+	int n, m;
+	cin >> n >> m;
+	graph = vector<vector<int>>(n);
+	for (int i = 0; i < m; i++) {
+		int a, b;
+		cin >> a >> b;
+		graph[a - 1].push_back(b - 1);
+	}
 
-    while(t--){
-        solve();
-    }
+	visited = vector<bool>(n);
+	on_stack = vector<bool>(n);
+	for (int i = 0; cycle.empty() && i < n; i++) { dfs(i); }
+
+	if (cycle.empty()) {
+		cout << "IMPOSSIBLE" << endl;
+	} else {
+		reverse(cycle.begin(), cycle.end());
+		cout << cycle.size() + 1 << "\n";
+		for (int node : cycle) { cout << node + 1 << " "; }
+		cout << cycle[0] + 1 << endl;
+	}
 }
