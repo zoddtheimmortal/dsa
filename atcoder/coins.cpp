@@ -1,6 +1,6 @@
 /** 
  immortalzodd
- 26.05.2024 23:42:23
+ 31.05.2024 15:54:39
  coins
 **/
 #include <bits/stdc++.h>
@@ -9,6 +9,7 @@ using namespace std;
 using ll = long long;
 using vi = vector<int>;
 using vl = vector<ll>;
+using vd = vector<long double>;
 
 #define all(x) x.begin(), x.end()
 #define fr(i, a, b) for (ll i = a; i < (b); ++i)
@@ -16,19 +17,19 @@ using vl = vector<ll>;
 #define nL "\n"
 #define fast_io ios_base::sync_with_stdio(false);cin.tie(nullptr)
 
-ll n;
-vector<double> prob;
+#define P 12
 
 void solve(){
-    cin>>n;
-    prob.assign(n,0); for(double&x:prob) cin>>x;
-    vector<double> dp(n,1);
-    fr(i,0,n){
-    	fr(k,0,i) dp[i]*=prob[i];
-    	fr(k,i,n) dp[i]*=1-prob[i];
+    ll n; cin>>n;
+    vd p(n,0); for(auto&x:p) cin>>x;
+    vector<vd> dp(n+1,vd(n+1,0));
+    fr(i,0,n+1) dp[i][0]=1;
+    fr(i,1,n+1){
+    	fr(j,1,n+1){
+    		dp[i][j]=dp[i-1][j-1]*(p[i-1])+dp[i-1][j]*(1-p[i-1]);
+    	}
     }
-    for(auto&x:dp) cout<<x<<" ";
-    cout<<nL;
+    cout<<setprecision(P)<<dp[n][n/2+1]<<nL;
 }
 
 int main(){

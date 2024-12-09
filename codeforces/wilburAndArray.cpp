@@ -19,7 +19,7 @@ using vl = vector<ll>;
 void solve(){
 	ll n; cin>>n;
 	vi arr(n,0); for(int&x:arr) cin>>x;
-	int ans=0,cur=0;
+	ll ans=0,cur=0;
 	fr(i,0,n){
 		ans+=abs(cur-arr[i]);
 		cur=arr[i];

@@ -1,6 +1,6 @@
 /** 
  immortalzodd
- 14.04.2024 23:02:40
+ 07.06.2024 18:43:29
  longestFlightRoute
 **/
 #include <bits/stdc++.h>
@@ -14,43 +14,69 @@ using vl = vector<ll>;
 #define fr(i, a, b) for (ll i = a; i < (b); ++i)
 #define rf(i, a, b) for (ll i = b; i >=(a); i--)
 #define nL "\n"
+#define fast_io ios_base::sync_with_stdio(false);cin.tie(nullptr)
 
-vector<vi> arr,back_edge;
-vi top_sort;
-vector<bool> visited;
-
-void dfs(int x){
-	visited[x]=true;
-	for(int&y:arr[x]){
-		if(!visited[y]) dfs(y);
-	}
-	top_sort.push_back(x);
-}
+ll n,m;
+vector<vi> arr,brr;
 
 void solve(){
-    ll n,m;
     cin>>n>>m;
-    arr.resize(n); back_edge.resize(n);
-    vi path(n,INT_MIN),parent(n,-1);
-
+    arr.resize(n);
+    brr.resize(n);
     fr(i,0,m){
     	ll f,s; cin>>f>>s;
     	arr[--f].push_back(--s);
-    	back_edge[s].push_back(f);
+    	brr[s].push_back(f);
     }
-    visited.assign(n,false);
+    vi top_sort,indeg(n,0);
+    fr(i,0,n){
+    	for(int&x:arr[i]) indeg[x]++;
+    }
 
-    dfs(0);
-    for(int&x:top_sort){
-    	for(int&y:back_edge[x]){
-    		
-    	}
-    }
+	queue<int> qs;
+	fr(i,0,n){
+		if(indeg[i]==0) qs.push(i);
+	}
+	while(!qs.empty()){
+		int u=qs.front();
+		top_sort.push_back(u);
+		qs.pop();
+		for(int&v:arr[u]){
+			if(--indeg[v]==0){
+				qs.push(v);
+			}
+		}
+	}
+
+	vi dp(n,INT_MIN),parent(n,-1);
+	dp[0]=1;
+	for(int&x:top_sort){
+		for(int&y:brr[x]){
+			if(dp[x]<1+dp[y]){
+				dp[x]=1+dp[y];
+				parent[x]=y;
+			}
+		}
+	}
+	if(dp[n-1]<0){
+		cout<<"IMPOSSIBLE"<<nL;
+	}
+	else{
+		vi route;
+		int si=n-1;
+		while(si!=-1){
+			route.push_back(si);
+			si=parent[si];
+		}
+		reverse(all(route));
+		cout<<dp[n-1]<<nL;
+		for(int&x:route) cout<<x+1<<" ";
+		cout<<nL;
+	}
 }
 
 int main(){
-    ios_base::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);
-  
+    fast_io;
     ll t=1;
     // cin>>t;
 

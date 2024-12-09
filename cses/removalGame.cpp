@@ -1,6 +1,6 @@
 /** 
  immortalzodd
- 24.05.2024 15:23:38
+ 31.05.2024 17:48:26
  removalGame
 **/
 #include <bits/stdc++.h>
@@ -20,11 +20,22 @@ ll n;
 vi arr;
 
 void solve(){
-    cin>>n;
-    arr.assign(n,0); for(int&x:arr) cin>>x;
-    vector<vi> dp(n,vi(n,0));
-    fr(i,0,n) dp[i][i]=arr[i];
-    
+	cin>>n;
+	arr.assign(n,0); for(int&x:arr) cin>>x;
+	vector<vl> dp(n,vl(n,0LL));
+	rf(i,0,n-1){
+		fr(j,i,n){
+			if(i==j){
+				dp[i][j]=arr[i];
+				continue;
+			}
+			dp[i][j]=max(arr[j]-dp[i][j-1],arr[i]-dp[i+1][j]);
+		}
+	}
+	ll sum=0;
+	for(int&x:arr) sum+=x;
+	cout<<(sum+dp[0][n-1])/2<<nL;
+	/* how tf did u get this? F+S=sum, F-S=dp[0][n-1]->solve this */
 }
 
 int main(){

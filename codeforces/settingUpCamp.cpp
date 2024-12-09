@@ -1,6 +1,6 @@
 /** 
  immortalzodd
- 08.04.2024 11:49:29
+ 07.08.2024 22:44:57
  settingUpCamp
 **/
 #include <bits/stdc++.h>
@@ -14,15 +14,37 @@ using vl = vector<ll>;
 #define fr(i, a, b) for (ll i = a; i < (b); ++i)
 #define rf(i, a, b) for (ll i = b; i >=(a); i--)
 #define nL "\n"
+#define fast_io ios_base::sync_with_stdio(false);cin.tie(nullptr)
 
 void solve(){
-	ll i,e,u; cin>>i>>e>>u;
-	
+    ll a,b,c; cin>>a>>b>>c;
+    ll ans=a;
+
+    ans+=b/3;
+    b%=3;
+    if((b==1&&c<2)||(b==2&&c<1)){
+    	cout<<-1<<nL;
+    	return;
+    }
+    if(b==2){
+    	b++; c--;
+    }
+    if(b==1){
+    	b+=2; c-=2;
+    }
+    ans+=b/3;
+
+    ans+=(c/3);
+    c%=3;
+    ans+=(c/2);
+    c%=2;
+    ans+=c;
+
+    cout<<ans<<nL;
 }
 
 int main(){
-    ios_base::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);
-  
+    fast_io;
     ll t=1;
     cin>>t;
 

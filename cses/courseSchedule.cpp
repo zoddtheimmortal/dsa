@@ -1,6 +1,6 @@
 /** 
  immortalzodd
- 12.04.2024 12:52:44
+ 10.06.2024 20:07:50
  courseSchedule
 **/
 #include <bits/stdc++.h>
@@ -14,49 +14,48 @@ using vl = vector<ll>;
 #define fr(i, a, b) for (ll i = a; i < (b); ++i)
 #define rf(i, a, b) for (ll i = b; i >=(a); i--)
 #define nL "\n"
+#define fast_io ios_base::sync_with_stdio(false);cin.tie(nullptr)
+
+ll n,m;
+vector<vi> arr;
+
+vi topsort(){
+	vi indeg(n,0);
+	fr(i,0,n){
+		for(int&x:arr[i]) indeg[x]++;
+	}
+	queue<int> qs;
+	fr(i,0,n) if(indeg[i]==0) qs.push(i);
+	vi ts;
+	while(!qs.empty()){
+		int v=qs.front();
+		qs.pop();
+		ts.push_back(v);
+		for(int&u:arr[v]){
+			if(--indeg[u]==0) qs.push(u);
+		}
+	}
+	return ts;
+}
 
 void solve(){
-    ll n,m; cin>>n>>m;
-    vector<vi> arr(n);
-
+    cin>>n>>m;
+    arr=vector<vi>(n);
     fr(i,0,m){
     	ll f,s; cin>>f>>s;
     	arr[--f].push_back(--s);
     }
-
-    vi indeg(n,0);
-    fr(i,0,n){
-    	for(int&x:arr[i]) indeg[x]++;
+    vi ts=topsort();
+    if(ts.size()<(int)n){
+    	cout<<"IMPOSSIBLE"<<nL;
+    	return;
     }
-
-	queue<int> qs;
-	vi ans;
-	fr(i,0,n){
-		if(indeg[i]==0) qs.push(i);
-	}
-
-	while(!qs.empty()){
-		int v=qs.front();
-		qs.pop();
-		ans.push_back(v+1);
-		for(auto&x:arr[v]){
-			indeg[x]--;
-			if(indeg[x]==0) qs.push(x);
-		}
-	}
-
-	if(ans.size()!=n){
-		cout<<"IMPOSSIBLE"<<nL;
-	}
-	else{
-		for(auto&x:ans) cout<<x<<" ";
-		cout<<nL;
-	}
+    for(int&x:ts) cout<<x+1<<" ";
+    cout<<nL;
 }
 
 int main(){
-    ios_base::sync_with_stdio(false);cin.tie(nullptr);cout.tie(nullptr);
-  
+    fast_io;
     ll t=1;
     // cin>>t;
 

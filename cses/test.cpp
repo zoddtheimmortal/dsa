@@ -1,62 +1,102 @@
-#include <algorithm>
-#include <iostream>
-#include <vector>
-
+//BeginCodeSnip{C++ Short Template}
+#include <bits/stdc++.h> // see /general/running-code-locally
 using namespace std;
 
-vector<vector<int>> graph;
-vector<bool> visited, on_stack;
-vector<int> cycle;
+using ll = long long;
 
-bool dfs(int node) {
-	visited[node] = on_stack[node] = true;
-	for (int next : graph[node]) {
-		if (on_stack[next]) {
-			cycle.push_back(node);  // start cycle
-			on_stack[node] = on_stack[next] = false;
-			return true;
-		} else if (!visited[next]) {
-			if (dfs(next)) {  // continue cycle
-				if (on_stack[node]) {
-					cycle.push_back(node);
-					on_stack[node] = false;
-					return true;
-				} else {  // found u again
-					cycle.push_back(node);
-					return false;
-				}
-			}
+using vi = vector<int>;
+#define pb push_back
+#define all(x) begin(x), end(x)
+#define sz(x) (int) (x).size()
 
-			if (!cycle.empty()) {
-				return false;  // finished with cycle
-			}
-		}
+using pi = pair<int,int>;
+#define f first
+#define s second
+#define mp make_pair
+
+void setIO(string name = "") {
+	cin.tie(0)->sync_with_stdio(0); // see /general/fast-io
+	if (sz(name)) {
+		freopen((name + ".in").c_str(), "r", stdin); // see /general/input-output
+		freopen((name + ".out").c_str(), "w", stdout);
 	}
+}
+//EndCodeSnip
 
-	on_stack[node] = false;
-	return false;
+/**
+ * Author: Lukas Polacek
+ * Date: 2009-10-30
+ * License: CC0
+ * Source: folklore/TopCoder
+ * Description: Computes partial sums a[0] + a[1] + ... + a[pos - 1],
+ * and updates single elements a[i],
+ * taking the difference between the old and new value.
+ * Time: Both operations are $O(\log N)$.
+ * Status: Stress-tested
+ */
+
+struct FT {
+	vector<ll> s;
+	FT(int n) : s(n) {}
+	void update(int pos, ll dif) {  // a[pos] += dif
+		for (; pos < sz(s); pos |= pos + 1) s[pos] += dif;
+	}
+	ll query(int pos) {  // sum of values in [0, pos)
+		ll res = 0;
+		for (; pos > 0; pos &= pos - 1) res += s[pos - 1];
+		return res;
+	}
+};
+
+const int mx = 2e5 + 1;
+
+vi adj[mx];
+int A[mx];
+int st[mx];
+int en[mx];
+int timer = 0;
+FT ft(mx + 1);
+
+void dfs(int x, int p) {  // euler tour
+	st[x] = timer++;
+	for (const int &e : adj[x])
+		if (e != p) dfs(e, x);
+	en[x] = timer - 1;
 }
 
 int main() {
-	int n, m;
-	cin >> n >> m;
-	graph = vector<vector<int>>(n);
-	for (int i = 0; i < m; i++) {
+	setIO();
+
+	int n, q;
+	cin >> n >> q;
+
+	for (int i = 1; i <= n; i++) cin >> A[i];
+
+	for (int i = 0; i < n - 1; i++) {
 		int a, b;
 		cin >> a >> b;
-		graph[a - 1].push_back(b - 1);
+		adj[a].pb(b);
+		adj[b].pb(a);
 	}
 
-	visited = vector<bool>(n);
-	on_stack = vector<bool>(n);
-	for (int i = 0; cycle.empty() && i < n; i++) { dfs(i); }
+	dfs(1, 0);
 
-	if (cycle.empty()) {
-		cout << "IMPOSSIBLE" << endl;
-	} else {
-		reverse(cycle.begin(), cycle.end());
-		cout << cycle.size() + 1 << "\n";
-		for (int node : cycle) { cout << node + 1 << " "; }
-		cout << cycle[0] + 1 << endl;
+	for (int i = 1; i <= n; i++) {
+		ft.update(st[i], A[i]);
+		ft.update(en[i] + 1, -A[i]);
+	}
+
+	for (int i = 0; i < q; i++) {
+		int type, s;
+		cin >> type >> s;
+		if (type == 1) {
+			int x;
+			cin >> x;
+			ft.update(st[s], x - A[s]);
+			ft.update(en[s] + 1, -(x - A[s]));  // increment by 1
+			A[s] = x;
+		} else {
+			cout << ft.query(st[s] + 1) << '\n';
+		}
 	}
 }
